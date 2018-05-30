@@ -12,6 +12,32 @@ type Room struct {
 	clients map[*Client]bool
 }
 
+// bit hacky
+func (r *Room) run() {
+	for {
+		select {
+		case client := <-r.join:
+			// joining
+			r.clients[client] = true
+		case client := <-r.leave:
+			delete(r.clients, client)
+			close(client.send)
+		case msg := <-r.forward:
+			// forward message to all clients
+			for client := range r.clients {
+				select {
+				case client.send <- msg:
+					// send the message
+				default:
+					// failed to send
+					delete(r.clients, client)
+					close(client.send)
+				}
+			}
+		}
+	}
+}
+
 // Client represents a user
 type Client struct {
 	socket *websocket.Conn
