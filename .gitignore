@@ -1,2 +1,4 @@
 main
 node_modules
+.idea/
+.vscode/
