@@ -1,25 +1,9 @@
 package main
 
-import (
-	"github.com/theweirdscience/room"
-)
+import "github.com/theweirdscience/chat-app/app/web/handler"
 
-func (r *room.Room) run() {
-	for {
-		select {
-		case client := <-r.join:
-			r.clients[client] = struct{}
-		case client := <-r.leave:
-			client.socket.Close()
-			delete(r.clients, client)
-		case msg := <-r.forward:
-			// forward message to all clients
-			for client := range r.clients {
-				err := client.send(msg)
-				if err != nil {
-					r.leave <- client
-				}
-			}
-		}
-	}
+func main() {
+
+	handler.HandleIndex()
+
 }

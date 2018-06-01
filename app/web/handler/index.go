@@ -17,7 +17,8 @@ func (mw DefaultFileMW) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func main() {
+// HandleIndex ...
+func HandleIndex() {
 
 	http.Handle("/", DefaultFileMW{
 		handler: http.FileServer(http.Dir("./client")),
