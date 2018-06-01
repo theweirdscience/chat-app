@@ -1,20 +1,7 @@
 package main
 
-import (
-	"github.com/gorilla/websocket"
-)
-
 type Empty struct{}
 
-// Room distribute channel that holds incoming messages
-type Room struct {
-	forward chan []byte // updates other channels
-	join    chan *Client
-	leave   chan *Client
-	clients map[*Client]Empty
-}
-
-// bit hacky
 func (r *Room) run() {
 	for {
 		select {
@@ -34,25 +21,4 @@ func (r *Room) run() {
 			}
 		}
 	}
-}
-
-// Client represents a user
-type Client struct {
-	socket *websocket.Conn
-	room   *Room
-}
-
-func (c *Client) read() {
-	for {
-		_, msg, err := c.socket.ReadMessage()
-		if err != nil {
-			break
-		}
-		c.room.forward <- msg
-	}
-	c.socket.Close()
-}
-
-func (c *Client) send(msg []byte) error {
-	return c.socket.WriteMessage(websocket.TextMessage, msg)
 }
