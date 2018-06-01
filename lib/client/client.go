@@ -11,6 +11,7 @@ type Client struct {
 
 // Receive ...
 func (c *Client) Receive(messages chan<- []byte) {
+
 	go func() {
 		for {
 			_, msg, err := c.socket.ReadMessage()
@@ -22,7 +23,9 @@ func (c *Client) Receive(messages chan<- []byte) {
 			messages <- msg
 		}
 		c.socket.Close()
+
 	}()
+
 }
 
 // Send ...
@@ -32,7 +35,7 @@ func (c *Client) Send(msg []byte) error {
 
 }
 
-q// Close ...
+// Close ...
 func (c *Client) Close() {
 
 	return c.socket.Close()

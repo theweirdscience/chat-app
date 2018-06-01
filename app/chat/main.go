@@ -1,13 +1,14 @@
 package main
 
-type Empty struct{}
+import (
+	"github.com/theweirdscience/room"
+)
 
-func (r *Room) run() {
+func (r *room.Room) run() {
 	for {
 		select {
 		case client := <-r.join:
-			// joining
-			r.clients[client] = Empty{}
+			r.clients[client] = struct{}
 		case client := <-r.leave:
 			client.socket.Close()
 			delete(r.clients, client)

@@ -13,16 +13,14 @@ func (mw DefaultFileMW) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		r.RequestURI = "/index.html"
 	}
 
-	// defer to regular handler
 	mw.handler.ServeHTTP(w, r)
 
 }
 
-// AppHandler handles the index, duh ;)
 func main() {
 
 	http.Handle("/", DefaultFileMW{
-		handler: http.FileServer(http.Dir("./client/dist")),
+		handler: http.FileServer(http.Dir("./client")),
 	})
 
 	http.ListenAndServe(":8080", nil)
