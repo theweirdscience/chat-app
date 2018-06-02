@@ -36,7 +36,7 @@ func (c *Client) Send(msg []byte) error {
 }
 
 // Close ...
-func (c *Client) Close() {
+func (c *Client) Close() error {
 
 	return c.socket.Close()
 
